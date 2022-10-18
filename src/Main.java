@@ -1,26 +1,29 @@
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        Board.showBoard();
+        Board.sleepTimeMil=0;
+        Board.charRange=6;
+
+
+        Board.showBoard("Initial");
         Board.firstFill();
-        for (int j=0; j<2; j++){
-            for (int i=Board.board.length-1; i>=0;i--){
-    //            Board.checkRowPang(i);
-                Board.checkColumnPang(i);
-                Board.charGoesDown();
-                Board.showBoard();
-                Board.fillAllLines();
-                Board.showBoard();
-                Board.checkRowPang(i);
-                Board.charGoesDown();
-                Board.showBoard();
-                Board.fillAllLines();
-                Board.showBoard();
+        Board.showBoard("First Fill");
+        Loop1:
+        while (true){
+            for(int i=0; i<Board.board.length-1; i++){
+                PotentialPang.checkPotentialRowPang(i);
+                Board.checkFillCheck();
+                PotentialPang.checkPotentialColumnPang(i);
+                Board.checkFillCheck();
             }
+            for (int i=0; i<Board.board.length-1; i++){
+                if (!Board.checkColumnPang(i) && !Board.checkRowPang(i)){
+                    break Loop1;
+                }
+            }
+
         }
-        System.out.println(Board.scores);
-
-
-
     }
 }
