@@ -13,6 +13,8 @@ public class Board {
             {'O','O','O','O','O','O','O','O'}
 };
 
+    public static int scores=0;
+
 
     public static void showBoard(){
         for (int i=0; i<board.length; i++){
@@ -24,16 +26,16 @@ public class Board {
         System.out.println();
     }
     public static char randomChar(){
-        return (char)((Math.random()*6)+65);
+        return (char)((Math.random()*4)+65);
     }
 
     public static void firstFill(){
         for (int i=0; i<board.length; i++){
             fillTopLine();
-            showBoard();
+//            showBoard();
             charGoesDown();
-            showBoard();
         }
+        showBoard();
     }
 
     public static void fillTopLine(){
@@ -44,9 +46,19 @@ public class Board {
         }
     }
 
+    public static void fillAllLines(){
+        for (int j=board.length-1; j>=0; j--){
+            for (int i=board[j].length-1; i>=0; i--){
+                if (board[j][i]=='O'){
+                    board[j][i]=randomChar();
+                }
+            }
+        }
+    }
+
     public static void charGoesDown(){
-        for (int j=0; j<board.length-1; j++){
-            for (int i=0; i<board[0].length; i++){
+        for (int j=board.length-2; j>=0; j--){
+            for (int i=board[j].length-1; i>=0; i--){
                 if (board[j+1][i]=='O'){
                     board[j+1][i]=board[j][i];
                     board[j][i]='O';
@@ -55,43 +67,52 @@ public class Board {
         }
     }
 
-    public static void checkRowPang(int row){
-        Loop1:
-        for (int i=0; i<board.length-2; i++){
-            if (board[row][i]==board[row][i+1]){
-                if (board[row][i]==board[row][i+2]){
-                    board[row][i]='O'; board[row][i+1]='O'; board[row][i+2]='O';
-                    System.out.println("1점!");
-                    showBoard();
-                    break Loop1;
-                }
-            }
-        }
-    }
 
-    public static void checkRow(int row){
+    public static void checkRowPang(int row){
         int count=1;
         int maxCount=1;
         int index=0;
-        char prev = board[row][0];
         for (int i=1; i<board[row].length; i++){
-            if (board[row][i]==prev){
-                count+=1;
-                if (maxCount<count){
+            if (board[row][i-1]==board[row][i]){
+                count++;
+                if (count>maxCount){
                     maxCount=count;
                     index=i;
                 }
             }else{
                 count=1;
-                prev=board[row][i];
             }
         }
         if (maxCount>=3){
-            for (int i=index-maxCount; i<index;i++){
-                board[row][i+1]='O';
-                System.out.println(index-maxCount);
+            for(int i=0; i<maxCount; i++){
+                board[row][index-i]='O';
             }
-            System.out.println(maxCount-2);
+            scores+=maxCount-2;
+            showBoard();
+        }
+    }
+
+    public static void checkColumnPang(int column){
+        int count=1;
+        int maxCount=1;
+        int index=0;
+        for (int i=1; i<board.length; i++){
+            if (board[i-1][column]==board[i][column]){
+                count++;
+                if (count>maxCount){
+                    maxCount=count;
+                    index=i;
+                }
+            }else{
+                count=1;
+            }
+        }
+        if (maxCount>=3){
+            for(int i=0; i<maxCount; i++){
+                board[index-i][column]='O';
+            }
+            System.out.println("PANG!");
+            scores+=maxCount-2;
             showBoard();
         }
     }
