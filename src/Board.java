@@ -57,16 +57,19 @@ public class Board {
     }
 
     public static void charGoesDown(){
-        for (int j=board.length-2; j>=0; j--){
-            for (int i=board[j].length-1; i>=0; i--){
-                if (board[j+1][i]=='O'){
-                    board[j+1][i]=board[j][i];
-                    board[j][i]='O';
+        for (int k=0; k<8; k++){
+
+            for (int j=board.length-2; j>=0; j--){
+                for (int i=board[j].length-1; i>=0; i--){
+                    if (board[j+1][i]=='O'){
+                        board[j+1][i]=board[j][i];
+                        board[j][i]='O';
+                    }
                 }
             }
+
         }
     }
-
 
     public static void checkRowPang(int row){
         int count=1;
